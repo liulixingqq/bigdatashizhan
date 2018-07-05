@@ -50,9 +50,11 @@ public class JobSubmitter {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        FileInputFormat.setInputPaths(job, new Path("D:\\input"));
-        FileOutputFormat.setOutputPath(job, new Path("D:\\output1"));
+//        FileInputFormat.setInputPaths(job, new Path("D:\\input"));
+//        FileOutputFormat.setOutputPath(job, new Path("D:\\output1"));
 
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
         job.waitForCompletion(true);
     }
 
