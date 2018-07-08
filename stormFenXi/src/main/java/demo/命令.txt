@@ -1,0 +1,12 @@
+HDP集群kafka broker的默认端口是6667，而不是9092
+1、新建一个名为mytopic的topic
+bin/kafka-topics.sh --create --zookeeper hdp21:2181 --replication-factor 1 --partitions 1 --topic mytopic
+2、查看新创建的Topic
+bin/kafka-topics.sh --list --zookeeper hdp21:2181
+3、测试：创建个消费者来消费mytopic里面的数据。bootstrap-server这里填主机名或者IP，而不是localhost
+bin/kafka-console-consumer.sh --bootstrap-server hdp21:6667 --topic mytopic --from-beginning
+4、删除Topic
+bin/kafka-topics.sh --delete --zookeeper hdp21:2181 --topic mytopic
+注意：这句命令只会将topic标识为“删除状态”。如果想，彻底删除Topic，需要将delete.topic.enable=true，并且重启Kafka
+
+
