@@ -1,0 +1,14 @@
+3.使用Storm的窗口函数，将结果写入MySQL
+在MySQL中创建数据库和相应的表：
+create database demo;
+CREATE USER 'demo'@'%'IDENTIFIED BY 'Welcome_1';
+GRANT ALL PRIVILEGES ON *.* TO 'demo'@'%';
+FLUSH PRIVILEGES;
+create table myresult(userid int primary key,PV int);
+
+注意：
+在上一章的课程中，pom文件已经集成了Storm与Kafka、Redis、JDBC、MySQL的依赖
+如果使用Storm的提供JdbcInsertBolt组件，会一直将结果不停写入MySQL中。更好的做法是：创建一个自己的Bolt组件：如果MySQL不存在该userid，就执行插入；如果已经存在就执行更新操作。
+
+当分析出每个用户的PV后，可在MySQL中执行下面的查询，查看黑名单用户信息。
+select userinfo.userid,userinfo.username,myresult.PV from userinfo,myresult where userinfo.userid=myresult.userid;

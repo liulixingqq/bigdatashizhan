@@ -1,0 +1,17 @@
+创建地区表
+create external table areainfo
+(areaid int,areaname string)
+row format delimited fields terminated by ','
+location '/input/project07';
+
+创建广告点击日志表
+create external table adloginfo
+(userid int,ip string,clicktime string,url string,areaid int)
+row format delimited fields terminated by ','
+location '/flume/20180603';
+
+通过SQL分析数据
+select areainfo.areaname,adloginfo.url,adloginfo.clicktime,count(adloginfo.clicktime)
+from adloginfo,areainfo
+where adloginfo.areaid=areainfo.areaid
+group by areainfo.areaname,adloginfo.url,adloginfo.clicktime;
