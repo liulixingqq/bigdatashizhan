@@ -1,0 +1,51 @@
+
+基本过程：
+1、创建表
+2、导入数据：把握原则：能不导入数据，就不要导入数据（外部表）
+
+创建地区表
+create external table area
+(area_id string,area_name string)
+row format delimited fields terminated by ','
+location '/input/project04/area';
+
+创建商品表
+create external table product
+(product_id string,product_name string,marque string,barcode string, price double,brand_id string,market_price double,stock int,status int)
+row format delimited fields terminated by ','
+location '/input/project04/product';
+
+创建一个临时表，用于保存用户点击的初始日志
+create external table clicklogTemp
+(user_id string,user_ip string,url string,click_time string,action_type string,area_id string)
+row format delimited fields terminated by ','
+location '/cleandata/project04';
+
+将数据导入下面的表
+insert into table clicklog select user_id,user_ip,substring(url,instr(url,"=")+1),click_time,action_type,area_id from clicklogTemp;
+
+创建用户点击日志表
+create external table clicklog
+(user_id string,user_ip string,product_id string,click_time string,action_type string,area_id string)
+row format delimited fields terminated by ',';
+
+查询各区域商品热度（建议：使用SQL99的标准）
+select a.area_id,b.area_name,a.product_id,c.product_name,count(a.product_id)
+from clicklog a join area b on a.area_id=b.area_id join product c on a.product_id=c.product_id
+group by a.area_id,b.area_name,a.product_id,c.product_name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

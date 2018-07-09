@@ -26,6 +26,7 @@ public class JobSubmitter {
         Configuration conf = new Configuration();
 //        conf.addResource("core-site.xml");
 
+
     	/*
     	 * 通过代码设置参数
     	 */

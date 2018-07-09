@@ -1,0 +1,13 @@
+加载地区表
+areainfo = load '/input/areainfo.txt' using PigStorage(',') as (areaid:int,areaname:chararray);
+加载广告日志表
+adloginfo = load '/flume/20180603/userclicklog.txt' using PigStorage(',') as (userid:int,ip:chararray,clicktime:chararray,url:chararray,areaid:int);
+
+按照url、地区、点击时间第广告点击日志进行分组
+adloginfo1 = group adloginfo by (url,areaid,clicktime);
+
+提取url、areaid、点击时间和总频率
+adloginfo2 = foreach adloginfo1 generate group,COUNT(adloginfo.clicktime);
+
+执行多表查询，关联地区表
+result = join areainfo by areaid, adloginfo2 by group.areaid;

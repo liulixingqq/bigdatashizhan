@@ -16,8 +16,8 @@
         <module>peopleTotalJDK</module>
         <module>shangpingtiScala</module>
         <module>ProductSalesInfoScala</module>
+        <module>stormFenXi</module>
         <module>wangyeTopKJDK</module>
-
     </modules>
 
 
