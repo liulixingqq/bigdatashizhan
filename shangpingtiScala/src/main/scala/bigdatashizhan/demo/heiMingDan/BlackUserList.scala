@@ -43,10 +43,11 @@ object BlackUserList {
     //创建Kafka的输入流，只能使用基于Receiver方式
     val kafkaStream = KafkaUtils.createStream(ssc, "192.168.157.21:2181", "mygroup", topics)
 
+    //kafkaStream   kafka 的数据k  v   k:代表偏移量  v:代表数据
     //日志：1,201.105.101.102,http://mystore.jsp/?productid=1,2017020020,1,1
     val logRDD = kafkaStream.map(_._2)
 
-    //统计用户的PV：窗口操作                                                                           每个用户的ID，记一次数
+    //统计用户的PV：窗口操作         每个用户的ID，记一次数
     val hot_user_id = logRDD.map(_.split(",")).map(x=>(x(0),1))       //窗口的长度           滑动距离
       .reduceByKeyAndWindow((a:Int,b:Int)=>(a+b),Seconds(30),Seconds(10))
 
@@ -60,7 +61,11 @@ object BlackUserList {
       hotUserTable.createOrReplaceTempView("hotip")
 
       //关联用户表，查询黑名单的信息
-      sqlContext.sql("select userinfo.user_id,userinfo.username,hotip.pv from userinfo,hotip where userinfo.user_id=hotip.user_id").show()
+      sqlContext.sql("select userinfo.user_id,userinfo.username,hotip.pv " +
+        "from userinfo,hotip " +
+        "where " +
+        "userinfo.user_id=hotip.user_id")
+        .show()
     })
 
     ssc.start()
