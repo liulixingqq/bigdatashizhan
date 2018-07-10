@@ -8,6 +8,7 @@ object HotProductByArea {
 
 
   def main(args: Array[String]): Unit = {
+    //减少其他日志的输出
     Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
     Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
 
