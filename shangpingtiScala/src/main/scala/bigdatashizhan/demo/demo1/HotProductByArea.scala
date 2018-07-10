@@ -34,7 +34,11 @@ object HotProductByArea {
     clickLogDF.createTempView("clicklog")
 
     //执行SQL
-    val sql = "select a.area_id,a.area_name,p.product_id,product_name,count(c.product_id) from area a,product p,clicklog c where a.area_id=c.area_id and p.product_id=c.product_id group by a.area_id,a.area_name,p.product_id,p.product_name"
+    val sql = "select a.area_id,a.area_name,p.product_id,product_name,count(c.product_id) " +
+                "from " +
+            "area a,product p,clicklog c " +
+          "where a.area_id=c.area_id and p.product_id=c.product_id " +
+            "group by a.area_id,a.area_name,p.product_id,p.product_name"
 
     spark.sql(sql).show()
 
