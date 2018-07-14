@@ -1,13 +1,9 @@
-package scalaTJ
+package bigdatashizhan.cf
 
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.mllib.linalg.distributed.{CoordinateMatrix, MatrixEntry, RowMatrix}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.mllib.linalg.distributed.MatrixEntry
-import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix
-import org.apache.spark.mllib.linalg.distributed.RowMatrix
 
 
 /*

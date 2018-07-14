@@ -1,15 +1,10 @@
-package scalaTJ
+package bigdatashizhan.cf
 
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.mllib.linalg.distributed.MatrixEntry
-import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
-import org.apache.spark.rdd.RDD
-import org.apache.spark.mllib.linalg.distributed.RowMatrix
-import org.apache.spark.mllib.linalg.distributed.IndexedRow
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.linalg.SparseVector
+import org.apache.spark.mllib.linalg.distributed.{CoordinateMatrix, IndexedRow, MatrixEntry, RowMatrix}
+import org.apache.spark.rdd.RDD
 /*
  * 建立物品的相似度，来进行推荐
  */
