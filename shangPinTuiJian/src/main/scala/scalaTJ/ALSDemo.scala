@@ -43,6 +43,38 @@ object ALSDemo {
     println("误差：" + rmse)
 
 
+    val ranks = List(5,15)
+    val lambdas = List(0.1,1)
+    val iters = List(5,15)
+    //得到最佳模型
+    var bestModel:Option[MatrixFactorizationModel] = None
+    var bestRMSE = Double.MaxValue
+    var bestRank = 0
+    var bestLambda =  -1.0
+    var bestNumit = -1
+
+
+    for(rank <- ranks;lambda <- lambdas;numit <- iters){
+      //通过ALS得到模型
+      val model = ALS.train(prodcutRatingsRDD, rank, numit, lambda)
+      //计算该模型的均方根误差
+      var rmse = computeRMSE(model,prodcutRatingsRDD,numRatings)
+
+      if(rmse < bestRMSE){
+        //最优模型
+        bestModel = Some(model)
+        bestRMSE = rmse
+        bestLambda = lambda
+        bestNumit = numit
+      }
+    }
+
+    println("最佳模型：" + bestModel)
+    println("最小误差：" + bestRMSE)
+    println("最佳lambda：" + bestLambda)
+    println("最佳迭代次数：" + bestNumit)
+
+
     //使用该模型，来进行推荐
     //需求: 给用户1推荐2个商品                                        用户ID   几个商品
     val recomm = model.recommendProducts(1, 2)
@@ -56,7 +88,14 @@ object ALSDemo {
 
   //计算RMSE ： 均方根误差
   def computeRMSE(model: MatrixFactorizationModel, data: RDD[Rating], n: Long): Double = {
+    //真实值：
     val predictions: RDD[Rating] = model.predict((data.map(x => (x.user, x.product))))
+    //数据：真实值((userID,itemID),rating) join 观测值 ((userID,itemID),rating)
+    /*
+     * select 真实值的评分,观测值的评分
+     * from 真实值,观测值
+     * where 真实值.(userID,itemID) = 观测值.(userID,itemID)
+     */
     val predictionsAndRating = predictions.map {
       x => ((x.user, x.product), x.rating)
     }.join(data.map(x => ((x.user, x.product), x.rating))).values
